@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import getActiveTab from './utils/getActiveTab';
 import NotFound from './components/NotFound';
 import ResultList from './components/ResultList';
