@@ -203,13 +203,6 @@ const inputArray = [75, 25, 50, 100, 7, 9];
 const result = getCountleResult(target, inputArray);
 
 console.log(result);
-// Output: [
-//   [7, 2, 75, 525], // 7 * 75 = 525
-//   [9, 2, 100, 900], // 9 * 100 = 900
-//   [525, 1, 25, 500], // 525 - 25 = 500
-//   [500, 3, 50, 10], // 500 / 50 = 10
-//   [900, 1, 10, 890 ] // 900 - 10 = 890
-// ]
 ```
 
 ## Support
