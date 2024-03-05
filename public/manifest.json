@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "version": "1.0.0",
+    "name": "Countle Solver",
+    "action": {
+        "default_popup": "index.html"
+    },
+    "host_permissions": ["https://*.countle.org/*"],
+    "permissions": [
+        "tabs",
+        "scripting"
+    ]
+}
