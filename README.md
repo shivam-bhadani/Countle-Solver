@@ -57,89 +57,125 @@ The algorithm utilizes backtracking to explore different paths and backtrack whe
 ### getNextList Function
 The `getNextList` function is a utility function used to generate the next list of available numbers after applying an arithmetic operation. It removes the two numbers involved in the operation and adds the result of the operation to the list.
 
-### getCountleResult Function
-The `getCountleResult` function serves as the entry point for solving Countle.org puzzles. It initializes the recursive process with the target number and the initial list of available numbers, and returns the solution in the form of a 2D array containing the sequence of operations applied to reach the target number.
+### getCountleAnswer Function
+The `getCountleAnswer` function serves as the entry point for solving Countle.org puzzles. It initializes the recursive process with the target number and the initial list of available numbers, and returns the solution in the form of a ICountleResultList[] array containing the sequence of operations applied to reach the target number.
 
 Here is the code that solves the puzzle:
 ```typescript
 function getNextList(arr: number[], index1: number, index2: number): number[] {
   const nextList: number[] = [];
   for (let i = 0; i < arr.length; i++) {
-      if (i !== index1 && i !== index2) {
-          nextList.push(arr[i]);
-      }
+    if (i !== index1 && i !== index2) {
+      nextList.push(arr[i]);
+    }
   }
   return nextList;
 }
 
-let ans: number[][] = [];
+export interface ICountleResultList {
+  firstNumber: number;
+  secondNumber: number;
+  symbol: number;
+  resultant: number;
+}
+
+const MAXIMUM_STEPS = 5;
+
+let ans: ICountleResultList[] = [];
 const memo: Set<string> = new Set();
 
-function recursion(target: number, availableNumbers: number[], current: number[][], steps: number): void {
+function recursion(
+  target: number,
+  availableNumbers: number[],
+  currentAnswer: ICountleResultList[],
+  steps: number
+): void {
   availableNumbers.sort((a, b) => a - b);
   if (ans.length) {
-      return;
+    return;
   }
   if (steps) {
-      const made = current[current.length - 1][3];
-      if (made === target) {
-          ans = [...current];
-          return;
-      }
-  }
-  if (steps > 5) return;
-  let memo_string : string = availableNumbers.join('_');
-  if (memo.has(memo_string)) {
+    const made = currentAnswer[currentAnswer.length - 1].resultant;
+    if (made === target) {
+      ans = [...currentAnswer];
       return;
+    }
+  }
+  if (steps > MAXIMUM_STEPS) return;
+  let memo_string: string = availableNumbers.join("_");
+  if (memo.has(memo_string)) {
+    return;
   }
   for (let i = 0; i < availableNumbers.length; i++) {
-      for (let j = 0; j < availableNumbers.length; j++) {
-          if (i !== j) {
-              const firstNumber = availableNumbers[i];
-              const secondNumber = availableNumbers[j];
+    for (let j = 0; j < availableNumbers.length; j++) {
+      if (i !== j) {
+        const firstNumber = availableNumbers[i];
+        const secondNumber = availableNumbers[j];
 
-              // Addition Operation
-              current.push([firstNumber, 0, secondNumber, firstNumber + secondNumber]);
-              const additionList = getNextList(availableNumbers, i, j);
-              additionList.push(firstNumber + secondNumber);
-              recursion(target, additionList, current, steps + 1);
-              current.pop();
+        // Addition Operation
+        currentAnswer.push({
+          firstNumber,
+          secondNumber,
+          symbol: 0,
+          resultant: firstNumber + secondNumber,
+        });
+        const additionList = getNextList(availableNumbers, i, j);
+        additionList.push(firstNumber + secondNumber);
+        recursion(target, additionList, currentAnswer, steps + 1);
+        currentAnswer.pop();
 
-              // Subtraction Operation
-              if (firstNumber >= secondNumber) {
-                  current.push([firstNumber, 1, secondNumber, firstNumber - secondNumber]);
-                  const subtractionList = getNextList(availableNumbers, i, j);
-                  subtractionList.push(firstNumber - secondNumber);
-                  recursion(target, subtractionList, current, steps + 1);
-                  current.pop();
-              }
+        // Subtraction Operation
+        if (firstNumber >= secondNumber) {
+          currentAnswer.push({
+            firstNumber,
+            secondNumber,
+            symbol: 1,
+            resultant: firstNumber - secondNumber,
+          });
+          const subtractionList = getNextList(availableNumbers, i, j);
+          subtractionList.push(firstNumber - secondNumber);
+          recursion(target, subtractionList, currentAnswer, steps + 1);
+          currentAnswer.pop();
+        }
 
-              // Multiplication Operation
-              current.push([firstNumber, 2, secondNumber, firstNumber * secondNumber]);
-              const multiplicationList = getNextList(availableNumbers, i, j);
-              multiplicationList.push(firstNumber * secondNumber);
-              recursion(target, multiplicationList, current, steps + 1);
-              current.pop();
+        // Multiplication Operation
+        currentAnswer.push({
+          firstNumber,
+          secondNumber,
+          symbol: 2,
+          resultant: firstNumber * secondNumber,
+        });
+        const multiplicationList = getNextList(availableNumbers, i, j);
+        multiplicationList.push(firstNumber * secondNumber);
+        recursion(target, multiplicationList, currentAnswer, steps + 1);
+        currentAnswer.pop();
 
-              // Division Operation
-              if (firstNumber % secondNumber === 0) {
-                  current.push([firstNumber, 3, secondNumber, firstNumber / secondNumber]);
-                  const divisionList = getNextList(availableNumbers, i, j);
-                  divisionList.push(firstNumber / secondNumber);
-                  recursion(target, divisionList, current, steps + 1);
-                  current.pop();
-              }
-          }
+        // Division Operation
+        if (firstNumber % secondNumber === 0) {
+          currentAnswer.push({
+            firstNumber,
+            secondNumber,
+            symbol: 3,
+            resultant: firstNumber / secondNumber,
+          });
+          const divisionList = getNextList(availableNumbers, i, j);
+          divisionList.push(firstNumber / secondNumber);
+          recursion(target, divisionList, currentAnswer, steps + 1);
+          currentAnswer.pop();
+        }
       }
+    }
   }
   memo.add(memo_string);
 }
 
-function getCountleResult(target: number, inputArray: number[]): number[][] {
-  const current: number[][] = [];
-  recursion(target, inputArray, current, 0);
+function getCountleAnswer(target: number, inputArray: number[]): ICountleResultList[] {
+  const currentAnswer: ICountleResultList[] = [];
+  recursion(target, inputArray, currentAnswer, 0);
   return ans;
 }
+
+export default getCountleAnswer;
 ```
 ### Description
 The `getCountleResult` function is the main function responsible for solving Countle.org puzzles. It takes the target number and the initial list of available numbers as inputs, and returns the solution in the form of a 2D array containing the sequence of operations applied to reach the target number.
@@ -151,12 +187,12 @@ The `getCountleResult` function is the main function responsible for solving Cou
   - Type: `number[]`
 
 ### Outputs
-- **Result**: A 2D array representing the solution to the Countle.org puzzle. Each inner array contains four elements representing a single operation applied to reach the target number.
-  - Element 1: The first number involved in the operation.
-  - Element 2: The operation type (0 for addition, 1 for subtraction, 2 for multiplication, 3 for division).
-  - Element 3: The second number involved in the operation.
-  - Element 4: The result of the operation.
-  - Type: `number[][]`
+- **Result**: An array of ICountleResultList[] representing the solution to the Countle.org puzzle. Each inner array is an object representing a single operation applied to reach the target number.
+  - firstNumber: The first number involved in the operation.
+  - secondNumber: The second number involved in the operation.
+  - symbol: The operation type (0 for addition, 1 for subtraction, 2 for multiplication, 3 for division).
+  - resultant: The result of the operation.
+  - Type: `ICountleResultList[]`
  
 ### Example
 ```typescript
