@@ -15,6 +15,8 @@ export interface ICountleResultList {
   resultant: number;
 }
 
+const MAXIMUM_STEPS = 5;
+
 let ans: ICountleResultList[] = [];
 const memo: Set<string> = new Set();
 
@@ -35,7 +37,7 @@ function recursion(
       return;
     }
   }
-  if (steps > 5) return;
+  if (steps > MAXIMUM_STEPS) return;
   let memo_string: string = availableNumbers.join("_");
   if (memo.has(memo_string)) {
     return;
