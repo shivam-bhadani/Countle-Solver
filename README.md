@@ -33,6 +33,15 @@ Follow these steps to install the Chrome extension:
 3. Click on **Solve** button to get the solution of the puzzle.
 4. Enjoy the solved puzzle.
 
+## Screen Shots
+
+1. Click on extension icon
+![Countle Solver Extension](https://github.com/shivam-bhadani/Countle-Solver/assets/86145793/e48181d1-8d01-4a72-b5dc-1c0131b75826)
+
+2. Click on Solve Button to get the solution
+![Solution](https://github.com/shivam-bhadani/Countle-Solver/assets/86145793/8d5f2714-2d75-4ff9-9fd9-f0552f6d1b89)
+
+
 ## Solution Approach
 The Countle Solver Chrome Extension uses a recursive algorithm to solve puzzles efficiently. Here's a breakdown of the solution approach:
 
