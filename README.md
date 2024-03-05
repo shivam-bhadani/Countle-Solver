@@ -193,17 +193,7 @@ The `getCountleResult` function is the main function responsible for solving Cou
   - symbol: The operation type (0 for addition, 1 for subtraction, 2 for multiplication, 3 for division).
   - resultant: The result of the operation.
   - Type: `ICountleResultList[]`
- 
-### Example
-```typescript
-import getCountleResult from './getCountleResult';
 
-const target = 890;
-const inputArray = [75, 25, 50, 100, 7, 9];
-const result = getCountleResult(target, inputArray);
-
-console.log(result);
-```
 
 ## Support
 If you encounter any issues or have any questions, feel free to open an issue on GitHub.
